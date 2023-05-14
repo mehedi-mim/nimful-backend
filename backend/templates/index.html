@@ -2,12 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Portfolio</title>
     <style>
         /* Add your desired CSS styles here */
+        html {
+            height: 100%;
+            margin: 0 5% 5% 5%;
+            display: grid;
+            place-items: center start;
+        }
+
+        .expandable-bar-header {
+          background-color: #E6FAF9;
+          padding: 10px;
+        }
+        .expandable-bar {
+            width: 1000px;
+            height: 50px;
+            border: 1px solid yellow;
+            overflow: hidden;
+            transition: height 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .expandable-bar-name {
+            margin-left: 10px;
+        }
+        .expanded {
+            height: 250px;
+        }
+
+        .expandable-bar-content {
+            padding: 0px;
+            margin: 5%;
+        }
+
+
         .company-logo {
             width: 100px;
             height: 100px;
+            /* Add additional styling as needed */
+        }
+        .profile-picture {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%; /* Make it circular */
+            margin-bottom: 2%
             /* Add additional styling as needed */
         }
 
@@ -25,6 +66,7 @@
             margin-left: 20px;
             /* Add additional styling as needed */
         }
+
 
         .skills {
             display: flex;
@@ -67,23 +109,97 @@
             /* Add additional styling as needed */
         }
 
+        .project {
+          margin-bottom: 20px;
+        }
+
+        .project-title {
+          font-weight: bold;
+        }
+
+        .project-dates {
+          color: #888;
+        }
+
+        .associated-with {
+          font-style: italic;
+          color: #888;
+        }
+
+        .project-description {
+          margin-top: 5px;
+        }
+
+
+        header {
+          background-color: #f1f1f1;
+          padding: 10px;
+        }
+
+        nav ul {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+        }
+
+        nav ul li {
+          display: inline-block;
+          margin-right: 10px;
+        }
+
+        nav ul li a {
+          text-decoration: none;
+          color: #333;
+          padding: 5px 10px;
+        }
+
+        nav ul li a:hover {
+          background-color: #ccc;
+        }
+
+
+
 
 
 
     </style>
 </head>
 <body>
-<h1>Portfolio</h1>
-<h2>About Me</h2>
-<p>As a software engineer at Vivasoft Limited, my passion lies in learning new technologies. I possess experience in
-    completing projects from scratch to live deployment, collaborating with teams, and working across multiple domains.
-    I have competed in programming contests such as NCPC and ICPC, solving over 1500 problems across various online
-    judges. Thanks to my self-assurance, I adapt quickly to new technologies and excel in communication and
-    teamwork.</p>
+<header>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Login</a></li>
+            <li><a href="#">Dashboard</a></li>
+        </ul>
+    </nav>
+</header>
+
+<h1>Mehedi Hasan Mim</h1>
+<div>
+    <img src="https://media.licdn.com/dms/image/D5603AQGwjVWpTk_u-Q/profile-displayphoto-shrink_200_200/0/1676829458370?e=1689811200&v=beta&t=DZ3R9JFJzrzx-10liWzC-IFQFq1NUBrhbsjj7MgDkuc"
+         alt="Mehedi Hasan Mim" class="profile-picture">
+
+</div>
+
+<div class="expandable-bar" onclick="expandBar(this)">
+    <div class="expandable-bar-header">
+        <h2>I am ..</h2>
+    </div>
+    <div class="expandable-bar-content" style="display: none" ;>
+        <p>As a software engineer at Vivasoft Limited, my passion lies in learning new technologies. I possess
+            experience in completing projects from scratch to live deployment, collaborating with teams, and working
+            across multiple domains. I have competed in programming contests such as NCPC and ICPC, solving over 1500
+            problems across various online judges. Thanks to my self-assurance, I adapt quickly to new technologies and
+            excel in communication and teamwork.</p>
+    </div>
+</div>
+
 
 <h2>Work Experience</h2>
 
-<div class="work-experience">
+<div class=" work-experience
+    ">
     <img src="https://media.licdn.com/dms/image/C4D0BAQEYJrR1iLUyOg/company-logo_100_100/0/1655447112250?e=1692230400&v=beta&t=tl8oyYAMrYI6SJVO72AEauozqpjoxEpz4B4U9rmBqls"
          alt="Vivasoft Limited" class="company-logo">
     <h3 class="job-title">Software Engineer L-II</h3>
@@ -178,6 +294,84 @@
     <p class="institute">Bagerhat Govt High School</p>
 </div>
 <!-- Add other sections of your portfolio here (e.g., Education, Skills, Projects) -->
+<h2>Projects</h2>
+
+<div class="project">
+    <h3 class="project-title">Stickler</h3>
+    <span class="project-dates">Oct 2022 - Present</span>
+    <div class="associated-with">Associated with Vivasoft Limited</div>
+    <div class="project-description">
+        <ul>
+            <li>An analytical system that allows different streamers/retailers to analyze their streams. The user can
+                also analyze customer feedbacks, comments, product sales statistics, and so on. This system was created
+                using the GraphQL convention. [Strawberry]
+            </li>
+        </ul>
+    </div>
+
+
+    <h3 class="project-title">Support Ticketing System</h3>
+    <span class="project-dates">Sep 2021 - Oct 2021</span>
+    <div class="associated-with">Associated with Vivasoft Limited</div>
+    <div class="project-description">
+        <ul>
+            <li>Created a SaaS application that can handle many organizational interfaces. Customers can create tickets
+                by Department, Service Category, and Priority, and those tickets are resolved by assigned users.[
+                (Django, MySQL) migrate to (FastAPI, PostgreSQL)]
+            </li>
+        </ul>
+    </div>
+
+    <h3 class="project-title">Toja Connected Water</h3>
+    <span class="project-dates">Sep 2022 - Oct 2022</span>
+    <div class="associated-with">Associated with Vivasoft Limited</div>
+    <div class="project-description">
+        <ul>
+            <li>Developed a system in which various organizations track their water consumption and can compensate an
+                amount subscription‐wise. Donate to various freshwater‐producing projects via Stripe and become rewarded
+                via certificates.
+            </li>
+        </ul>
+    </div>
+
+
+    <h3 class="project-title">Tipspoi Mobile App</h3>
+    <span class="project-dates">Feb 2021 - Aug 2021</span>
+    <div class="associated-with">Associated with Inovace Technologies</div>
+    <div class="project-description">
+        <ul>
+            <li>A cloud‐based attendance monitoring mobile application which interacts with HRM web software. Admin
+                can see the attendance of 100+ organizations and carry out various HR functionalities
+                efficiently.[Flutter]
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function expandBar(element) {
+        element.classList.toggle('expanded');
+        var nameElement = element.querySelector('.expandable-bar-name');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+  var header = document.querySelector('.expandable-bar-header');
+  var content = document.querySelector('.expandable-bar-content');
+
+  header.addEventListener('click', function() {
+    if (content.style.display === 'none') {
+      content.style.display = 'block';
+    } else {
+      content.style.display = 'none';
+    }
+  });
+});
+
+
+
+
+</script>
 
 </body>
 </html>
