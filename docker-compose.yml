@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+
+  postgres-nimful-db:
+    image: postgres:12.3-alpine
+    restart: always
+    volumes:
+      - nimful_db_volume:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: "nimful_db"
+      POSTGRES_PASSWORD: "12345"
+    ports:
+      - 5469:5432
+    networks:
+      - nimful_backend_network
+
+  backend:
+    build:
+      context: backend
+      dockerfile: Dockerfile
+
+    restart: always
+    tty: true
+    volumes:
+      - ./backend:/app/:cached
+      - ./.docker/.ipython:/root/.ipython:cached
+    environment:
+      PYTHONPATH: .
+    depends_on:
+      - postgres-nimful-db
+    networks:
+      - nimful_backend_network
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+
+volumes:
+  nimful_db_volume:
+
+networks:
+  nimful_backend_network:
+    driver: bridge

@@ -3,8 +3,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
+from config import get_config
+
 app = FastAPI(
-    title="Nimful",
+    title=get_config().project_title,
     docs_url="/api/docs",
 )
 templates = Jinja2Templates(directory="templates")
@@ -24,5 +26,5 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         reload=True,
-        port=8080,
+        port=get_config().backend_port,
     )
