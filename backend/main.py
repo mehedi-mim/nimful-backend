@@ -3,6 +3,10 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 
+import config
+from core import const
+from core.auth import auth_router
+from routers.api import v1
 from core.database_connection import database_health_check
 from config import get_config
 
@@ -24,6 +28,12 @@ app.add_middleware(
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+
+app.include_router(
+    auth_router,
+    prefix=const.API_STR,
+    tags=["auth"]
+)
 
 if __name__ == "__main__":
     uvicorn.run(
