@@ -1,3 +1,5 @@
+from fastapi import HTTPException, status
+
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, date
 from sqlalchemy import select
@@ -7,6 +9,7 @@ from pyseto import Key
 
 from config import get_config
 from db import models
+from repository.user_repository import UserRepository
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -18,36 +21,20 @@ def json_serial(obj):
     raise TypeError("Type %s not serializable" % type(obj))
 
 
-class LoginService:
-    @staticmethod
-    async def authenticate_user(login_data):
-        db = None
-        sql = select(models.User).where(
-            models.User.email == login_data.email,
-            models.User.status == models.UserStatus.ACTIVE.value
-        )
-        db_user = (await db.execute(sql)).scalars().first()
+class LoginService(UserRepository):
+    async def authenticate_user(self, db, login_data):
+        db_user = await self.get_login_email_user(db, login_data.email)
         if db_user and LoginService.verify_password(login_data.password, db_user.password_hash):
-            return db_user
-        else:
-            return None
+            salt = None
+            access_token = await LoginService.create_access_token(db_user, salt)
+            refresh_token = await LoginService.create_refresh_token(db_user, salt)
+            return {
+                "access_token": access_token,
+                "refresh_token": refresh_token
+            }
 
-    @staticmethod
-    async def get_role_by_user(info, user):
-        db = info.context["db"]
-        organization_user_sql = select(models.OrganizationUser).where(
-            models.OrganizationUser.user_id == user.id,
-            models.OrganizationUser.deleted_at == None
-        )
-        db_organization_user = (await db.execute(organization_user_sql)).scalars().first()
-        if db_organization_user:
-            try:
-                role = models.UserRoles(db_organization_user.role).name
-            except:
-                role = None
-            return role
         else:
-            return None
+            raise HTTPException(detail="Invalid login credential!", status_code=404)
 
     @staticmethod
     def hashed_password(password):

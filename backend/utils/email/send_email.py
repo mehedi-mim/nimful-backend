@@ -4,21 +4,19 @@ from typing import Any
 
 from config import get_config
 from utils.email import email_type_enums
-from utils.templates.reset_password_template import reset_password_mail
-from utils.templates.signup_template import verification_mail
-from utils.templates.invitation_template import invitation_verification_mail
+from utils.email.signup_verification_mail import verification_mail
 
 
 async def send_email(email, email_type: Any, **kwargs):
     if email_type == email_type_enums.MailSendType.VERIFICATION.value:
         subject = "Confirm your email address"
         body = verification_mail(kwargs, email=email)
-    elif email_type == email_type_enums.MailSendType.PASSWORD_RESET.value:
-        subject = "Forgot password?"
-        body = reset_password_mail(kwargs)
-    elif email_type == email_type_enums.MailSendType.INVITATION_USER.value:
-        subject = f"Join my {kwargs.get('organization_name', '')} Team on Stickler"
-        body = invitation_verification_mail(kwargs)
+    # elif email_type == email_type_enums.MailSendType.PASSWORD_RESET.value:
+    #     subject = "Forgot password?"
+    #     body = " "# reset_password_mail(kwargs)
+    # elif email_type == email_type_enums.MailSendType.INVITATION_USER.value:
+    #     subject = f"Join my {kwargs.get('organization_name', '')} Team on Stickler"
+    #     body = " "# invitation_verification_mail(kwargs)
     else:
         return
         # Email Send

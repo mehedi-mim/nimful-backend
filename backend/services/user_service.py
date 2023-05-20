@@ -1,64 +1,45 @@
 import json
 import uuid
-import strawberry
 import pyseto
 from pyseto import Key
 from fastapi import HTTPException, status
 
 from passlib.context import CryptContext
 from sqlalchemy import select
-from datetime import datetime
 
 from config import get_config
 from db import models, Status
+from repository.user_repository import UserRepository
+from utils.email import MailSendType, send_email
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 # To Do Error Flow with exception,error message
-class UserService:
-    @staticmethod
-    async def signup(signup_data):
-        db = None
-        return True
-        # db_previous_user = await UserService.verify_data(signup_data)
-        #
-        # password = signup_data.password
-        # hashed_password = UserService.get_hashed_password(password)
-        # list_of_password_hash = [hashed_password]
-        # meta = {
-        #     "password_history": {
-        #         "password_hash_list": list_of_password_hash
-        #     }
-        # }
-        # if db_previous_user is not None:
-        #     db_previous_user.email = signup_data.email
-        #     db_previous_user.password_hash = hashed_password
-        #     db_previous_user.first_name = signup_data.first_name
-        #     db_previous_user.last_name = signup_data.last_name
-        #     db_previous_user.status = Status.INACTIVE.value
-        #     db_previous_user.mobile = signup_data.mobile
-        #     db_previous_user.meta = json.dumps(meta)
-        #     db.add(db_previous_user)
-        #     await db.commit()
-        #     return db_previous_user
-        # else:
-        #     try:
-        #         db_user = models.User(
-        #             email=signup_data.email,
-        #             password_hash=hashed_password,
-        #             first_name=signup_data.first_name,
-        #             last_name=signup_data.last_name,
-        #             status=Status.INACTIVE.value,
-        #             mobile=signup_data.mobile,
-        #             meta=json.dumps(meta),
-        #         )
-        #         db.add(db_user)
-        #         await db.commit()
-        #         return db_user
-        #     except Exception as e:
-        #         print(e)
-        #         return None
+class UserService(UserRepository):
+    async def signup(self, db, signup_data, background_tasks):
+        db_previous_user = await self.get_active_user(db, signup_data.email, signup_data.username)
+        if db_previous_user:
+            raise HTTPException("Email or username already exist!", 409)
+
+        password = signup_data.password
+        hashed_password = UserService.get_hashed_password(password)
+        signup_data.password = hashed_password
+        created_user = await self.create_new_user(db, signup_data)
+
+        if created_user:
+            try:
+                background_tasks.add_task(
+                    send_email,
+                    email=created_user.email,
+                    email_type=MailSendType.VERIFICATION.value,
+                    id=created_user.id
+                )
+                return "Verify your account. An account activation link has been sent to the email address you provided."
+            except:
+                return "Successfully registered, mail isn't sent."
+        else:
+            return "Something went wrong with signup data."
 
     @staticmethod
     def get_hashed_password(password):
@@ -81,26 +62,35 @@ class UserService:
         else:
             return None
 
-    @staticmethod
-    async def resend_email(info, resend_data):
-        db = info.context["db"]
-        sql = select(models.User).where(
-            models.User.email == resend_data.email,
-            models.User.status == Status.INACTIVE.value
-        )
-        db_previous_user = (await db.execute(sql)).scalars().first()
-        if db_previous_user:
-            return db_previous_user
+    async def resend_email(self, db, resend_data, background_tasks):
+        get_inactive_user = await self.get_inactive_user(db, resend_data.email)
+        if get_inactive_user:
+            try:
+                background_tasks.add_task(
+                    send_email,
+                    email=get_inactive_user.email,
+                    email_type=MailSendType.VERIFICATION.value,
+                    id=get_inactive_user.id
+                )
+                return "Successfully sent email, please check email for verification!"
+            except:
+                raise HTTPException(409, detail="Something went wrong with sending email!")
         else:
-            return None
+            raise HTTPException(409, detail="No pending user found with this email!")
 
-    @staticmethod
-    async def verify_signup_user(info, verify_data):
-        db = info.context["db"]
+    async def verify_signup_user(self, db, verify_data):
         token = verify_data.token
         try:
-            user = await UserService.get_user_by_token(db, token)
-            return True if user else False
+            local_key = Key.new(version=4, purpose="local", key=get_config().paseto_local_key)
+            decoded = pyseto.decode(local_key, token)
+            payload = decoded.payload.decode()
+            payload = json.loads(payload)
+            user_id = payload['data']['id']
+            current_user = await self.get_user_by_id(db, user_id)
+
+            if current_user:
+                update_current_user = await self.update_after_verification(db, current_user)
+                return update_current_user
         except:
             return False
 
