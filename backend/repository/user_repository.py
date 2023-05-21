@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 from db import models, Status
 
@@ -16,9 +16,8 @@ class UserRepository:
         """
         try:
             user_sql = select(models.User).where(
-                models.User.email == email,
+                or_(models.User.email == email, models.User.username == username),
                 models.User.status == Status.ACTIVE.value,
-                models.User.username == username
             )
             data = (await db.execute(user_sql)).scalars().first()
             return data

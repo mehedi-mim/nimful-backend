@@ -20,7 +20,7 @@ class UserService(UserRepository):
     async def signup(self, db, signup_data, background_tasks):
         db_previous_user = await self.get_active_user(db, signup_data.email, signup_data.username)
         if db_previous_user:
-            raise HTTPException("Email or username already exist!", 409)
+            raise HTTPException(409, detail="Email or username already exist!")
 
         password = signup_data.password
         hashed_password = UserService.get_hashed_password(password)
