@@ -18,7 +18,7 @@ def verification_mail(data, email):
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,200;400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-    <title>Stickler</title>
+    <title>Nimful</title>
     <style type="text/css">
         body,
         div,
@@ -53,40 +53,35 @@ margin: 0 auto;
                 <tr>
                     <td style="text-align: left">
                         <a href="#">
-                            <img src="https://stickler-dev.s3.ap-southeast-1.amazonaws.com/Logo.png" alt="logo" style="width: 100px;">
+                            <img src="https://scontent.fdac138-2.fna.fbcdn.net/v/t1.6435-9/138612640_231709138478305_4924035284777350209_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a26aad&_nc_eui2=AeFLHfh40gRArPFydqvijX2ny_hNFPyIJ_PL-E0U_Ign8-h0LE_SKV5JrzVUEil4dz8Jbn0eLVTFo3C6xrHDiIyo&_nc_ohc=1eG2P9mNq8QAX8ZmR6A&_nc_ht=scontent.fdac138-2.fna&oh=00_AfBknZ_HbphREpU8opC9030orvRspJhIMZ0wGsCfX-kxtw&oe=64918864" alt="logo" style="width: 100px;">
                         </a>
                     </td>
                     <td style="text-align: right;">
-                        <a href="{get_config().login_url}" style="font-weight: 600;text-decoration: none;color: #005AFF;font-family: montserrat;font-size: 14px;">
-                            Login to stickler.live
+                        <a href="{get_config().login_url}" style="font-weight: 600;text-decoration: none;color: #1c5523;font-family: montserrat;font-size: 14px;">
+                            Login to Nimful
                         </a>
                     </td>
                 </tr>
              </table>
             <hr/>
             <div>
-                <p style="text-align:center">
-                    <a href="#">
-                        <img src="https://stickler-dev.s3.ap-southeast-1.amazonaws.com/verify.png" alt="logo" style="width: 37%">
-                    </a>
-                </p>
                 <p style="
                 text-align: center;
                 font-size: 20px;
                 font-family: montserrat;
-                font-weight: 700;
+                font-weight: 500;
                 padding-bottom: 28px;
                 ">
-                  Verify your e-mail to finish signing up to Stickler
+                  Verify your e-mail to finish signing up to Nimful.
                 </p>
                 <div style="font-family: montserrat;font-weight: 400;font-size: 12px; color: #000">
-                    <p>Thank you for choosing Stickler.</p>
+                    <p>Thank you for choosing Nimful.</p>
                     <p style="padding-top: 20px;">Please confirm that {email} is your email address by clicking on the button below.</p>
-                    <p style="padding-top: 20px;"> If you did not register with Stickler, please ignore this email.</p>
+                    <p style="padding-top: 20px;"> If you did not register with Nimful, please ignore this email.</p>
                 </div>
                 <!-- button start -->
                 <p style="text-align:center; margin:25px 0px;">
-                    <a href="{get_config().signup_verification_url}/{encoding_token(data['id'])}" style="background-color:#005AFF;border-radius: 6px;text-decoration: none;color: white;padding: 7px 50px;">Verify</a>
+                    <a href="{get_config().signup_verification_url}/{encoding_token(data['id'])}" style="background-color:#1c5523;border-radius: 6px;text-decoration: none;color: white;padding: 7px 50px;">Verify</a>
                 </p>
                 <!-- button end -->
             </div>
