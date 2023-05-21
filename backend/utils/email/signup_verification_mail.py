@@ -81,7 +81,7 @@ margin: 0 auto;
                 </div>
                 <!-- button start -->
                 <p style="text-align:center; margin:25px 0px;">
-                    <a href="{get_config().signup_verification_url}/{encoding_token(data['id'])}" style="background-color:#1c5523;border-radius: 6px;text-decoration: none;color: white;padding: 7px 50px;">Verify</a>
+                    <a href="{get_config().signup_verification_url}?token={encoding_token(data['id'])}" style="background-color:#1c5523;border-radius: 6px;text-decoration: none;color: white;padding: 7px 50px;">Verify</a>
                 </p>
                 <!-- button end -->
             </div>
