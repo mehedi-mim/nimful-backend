@@ -1,5 +1,4 @@
-from fastapi import HTTPException, status
-
+from fastapi import HTTPException, status, Request
 from passlib.context import CryptContext
 from datetime import datetime, timedelta, date
 from sqlalchemy import select
@@ -8,7 +7,7 @@ import pyseto
 from pyseto import Key
 
 from config import get_config
-from db import models
+from db import models, get_session
 from repository.user_repository import UserRepository
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -88,10 +87,35 @@ class LoginService(UserRepository):
             salt = payload['data']['salt']
             sql = select(models.User).where(
                 models.User.id == user_id,
-                models.User.status == models.UserStatus.ACTIVE.value,
+                models.User.status == models.Status.ACTIVE.value,
                 models.User.salt == salt
             )
             current_user = (await db.execute(sql)).scalars().first()
             return current_user
         except:
             return None
+
+    @staticmethod
+    async def get_current_user(request: Request):
+        access_token = request.headers.get("access_token", None)
+        if not access_token:
+            raise HTTPException(401, "Not authenticated.")
+        async with get_session() as db:
+            try:
+                local_key = Key.new(version=4, purpose="local", key=get_config().paseto_local_key)
+                decoded = pyseto.decode(local_key, access_token)
+                payload = decoded.payload.decode()
+                payload = json.loads(payload)
+                user_id = payload['data']['id']
+                sql = select(models.User).where(
+                    models.User.id == user_id,
+                    models.User.status == models.Status.ACTIVE.value
+                )
+                current_user = (await db.execute(sql)).scalars().first()
+                await db.close()
+                if current_user:
+                    return current_user
+                raise HTTPException(401, "Not authenticated.")
+            except Exception as e:
+                await db.close()
+        raise HTTPException(401, "Not authenticated.")

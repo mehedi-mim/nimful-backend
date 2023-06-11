@@ -21,6 +21,7 @@ class User(Base, CommonBase):
     deleted_by_id = Column(Integer, ForeignKey('users.id'))
     salt = Column(String)
     meta = Column(JSON)
+    seed = Column(String)
     # Relationship
     created_by = relationship("User", foreign_keys=[created_by_id])
     updated_by = relationship("User", foreign_keys=[updated_by_id])

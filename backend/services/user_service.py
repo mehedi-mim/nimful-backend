@@ -231,3 +231,25 @@ class UserService(UserRepository):
         if token_password_hash != previous_hash:
             return False
         return True
+
+    async def verify_seed(self, db, seed: str) -> str:
+        """
+        :param db:
+        :param seed:
+        :return:
+        """
+        data = await self.verify_seed_data(db, seed)
+        if data:
+            return "Success!"
+        raise HTTPException(409, detail="No user found with this seed!")
+
+    async def create_seed(self, db, current_user) -> str:
+        """
+        :param db:
+        :param seed:
+        :return:
+        """
+        data = await self.create_seed_data(db, current_user)
+        if data:
+            return "Success!"
+        raise HTTPException(409, detail="No user found with this seed!")

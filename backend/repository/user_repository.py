@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import select, or_
 
 from db import models, Status
@@ -76,3 +78,24 @@ class UserRepository:
         )
         db_user = (await db.execute(sql)).scalars().first()
         return db_user
+
+    @staticmethod
+    async def verify_seed_data(db, seed):
+        sql = select(models.User).where(
+            models.User.seed == seed,
+            models.User.status == models.Status.ACTIVE.value
+        )
+        db_user = (await db.execute(sql)).scalars().first()
+        await db.close()
+        return db_user
+
+    @staticmethod
+    async def create_seed_data(db, current_user):
+        try:
+            seed = uuid.uuid4().hex
+            current_user.seed = seed
+            db.add(current_user)
+            await db.commit()
+            return current_user
+        except:
+            return None
