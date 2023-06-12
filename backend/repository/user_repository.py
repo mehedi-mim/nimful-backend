@@ -1,3 +1,5 @@
+import datetime
+import json
 import uuid
 
 from sqlalchemy import select, or_
@@ -97,5 +99,38 @@ class UserRepository:
             db.add(current_user)
             await db.commit()
             return current_user
-        except:
+        except Exception as e:
             return None
+
+    @staticmethod
+    async def check_previous_data(db, user):
+        today = datetime.datetime.today().date()
+        sql = select(models.DomainVisitUser).where(
+            models.DomainVisitUser.user_id == user.id,
+            models.DomainVisitUser.entry_date == today
+        )
+        db_domain_visit = (await db.execute(sql)).scalars().first()
+        return db_domain_visit
+
+    @staticmethod
+    async def create_domain_visit_user(db, data, user, seed_domain):
+        if data:
+            json_data = json.loads(data.domain_visits)
+            previous_count = json_data.get(f"{seed_domain.domain}", 0)
+            json_data[f"{seed_domain.domain}"] = previous_count + 1
+            data.domain_visits = json.dumps(json_data)
+            db.add(data)
+            await db.commit()
+            await db.close()
+            return data
+        json_data = {
+            f"{seed_domain.domain}": 1
+        }
+        db_domain_visit = models.DomainVisitUser(
+            user_id=user.id,
+            domain_visits=json.dumps(json_data),
+            entry_date=datetime.datetime.today()
+        )
+        db.add(db_domain_visit)
+        await db.commit()
+        return db_domain_visit

@@ -253,3 +253,21 @@ class UserService(UserRepository):
         if data:
             return "Success!"
         raise HTTPException(409, detail="No user found with this seed!")
+
+    async def create_domain_visit(self, db, seed_domain):
+        """
+
+        :param db:
+        :param seed_domain:
+        :return:
+        """
+        data = None
+        get_user = await self.verify_seed_data(db, seed_domain.seed)
+        if get_user:
+            data = await self.check_previous_data(db, get_user)
+        else:
+            raise HTTPException(409, "Unauthorized action!")
+        db_domain_visit = await self.create_domain_visit_user(db, data, get_user, seed_domain)
+        if db_domain_visit:
+            return "Success"
+        raise HTTPException(422, "Invalid data!")

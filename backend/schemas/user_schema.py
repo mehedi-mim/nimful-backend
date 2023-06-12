@@ -101,14 +101,11 @@ class ResendEmail(BaseModel):
     email: str
 
 
-class ForgetPasswordData(BaseModel):
-    email: str
-
-
-class ResetPasswordData(BaseModel):
-    password: str
-
-
 class LoginData(BaseModel):
     email: str
     password: str
+
+
+class SeedDomain(BaseModel):
+    seed: str
+    domain: str
