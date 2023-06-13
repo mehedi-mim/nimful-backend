@@ -9,7 +9,7 @@ from core.auth import auth_router
 from routers.api import v1
 from core.database_connection import database_health_check
 from config import get_config
-from routers.api.v1 import user_router
+from routers.api.v1 import user_router, web_cloud_router
 
 app = FastAPI(
     on_startup=[
@@ -40,6 +40,12 @@ app.include_router(
     user_router,
     prefix=const.API_STR,
     tags=["users"]
+)
+
+app.include_router(
+    web_cloud_router,
+    prefix=const.API_STR,
+    tags=["web-cloud"]
 )
 
 if __name__ == "__main__":
