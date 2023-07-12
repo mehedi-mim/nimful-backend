@@ -18,9 +18,9 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # To Do Error Flow with exception,error message
 class UserService(UserRepository):
     async def signup(self, db, signup_data, background_tasks):
-        db_previous_user = await self.get_active_user(db, signup_data.email, signup_data.username)
+        db_previous_user = await self.get_previous_email_or_username_check(db, signup_data.email, signup_data.username)
         if db_previous_user:
-            raise HTTPException(409, detail="Email or username already exist!")
+            raise HTTPException(409, detail="Email or username taken!")
 
         password = signup_data.password
         hashed_password = UserService.get_hashed_password(password)

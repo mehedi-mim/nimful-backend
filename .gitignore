@@ -1,11 +1,6 @@
-env
-env/
+.env
 __pycache__
 .idea
 /idea
 idea/
 __pycache__/
-env*
-*env
-
-

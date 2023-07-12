@@ -9,7 +9,7 @@ from db import models, Status
 
 class UserRepository:
     @staticmethod
-    async def get_active_user(db, email, username, *args, **kwargs):
+    async def get_previous_email_or_username_check(db, email, username, *args, **kwargs):
         """
         :param db: taking database session
         :param email: checking previous user with this email
@@ -21,7 +21,6 @@ class UserRepository:
         try:
             user_sql = select(models.User).where(
                 or_(models.User.email == email, models.User.username == username),
-                models.User.status == Status.ACTIVE.value,
             )
             data = (await db.execute(user_sql)).scalars().first()
             return data
