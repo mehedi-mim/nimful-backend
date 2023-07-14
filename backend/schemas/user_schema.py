@@ -57,8 +57,8 @@ class SignupUser(BaseModel):
     email: str
     password: str
     mobile: str = None
-    first_name: str = None
-    last_name: str = None
+    first_name: str
+    last_name: str
 
     @validator('username', 'password', 'email', 'mobile', 'first_name', 'last_name')
     def validate_data(cls, value, field):
@@ -73,10 +73,10 @@ class SignupUser(BaseModel):
             if not validation:
                 raise HTTPException(detail=f"Invalid {field.name}: {value}", status_code=400)
 
-        if field.name == 'firstname' or field.name == 'lastname':
+        if field.name == 'first_name' or field.name == 'last_name':
             value = ' '.join(value.split())
             if len(value) == 0 or value == " ":
-                raise HTTPException(detail=f"Please enter a valid {field.name}", status_code=400)
+                raise HTTPException(detail=f"Names can't be empty!", status_code=400)
 
         if field.name == 'password':
             validation = common_validation.global_password_check(value)
