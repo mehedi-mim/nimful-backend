@@ -62,6 +62,9 @@ class SignupUser(BaseModel):
 
     @validator('username', 'password', 'email', 'mobile', 'first_name', 'last_name')
     def validate_data(cls, value, field):
+        if len(value) > 20:
+            raise HTTPException(detail=f"Max length of any value is 20!", status_code=400)
+
         common_validation = CommonValidation()
         if field.name == 'username':
             value = ' '.join(value.split())
