@@ -80,6 +80,7 @@ class UserService(UserRepository):
 
     async def verify_signup_user(self, db, verify_data):
         token = verify_data.token
+        print(token)
         try:
             local_key = Key.new(version=4, purpose="local", key=get_config().paseto_local_key)
             decoded = pyseto.decode(local_key, token)
@@ -87,11 +88,11 @@ class UserService(UserRepository):
             payload = json.loads(payload)
             user_id = payload['data']['id']
             current_user = await self.get_user_by_id(db, user_id)
-
             if current_user:
                 update_current_user = await self.update_after_verification(db, current_user)
                 return update_current_user
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     @staticmethod

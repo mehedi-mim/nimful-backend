@@ -53,7 +53,7 @@ margin: 0 auto;
                 <tr>
                     <td style="text-align: left">
                         <a href="#">
-                            <img src="https://scontent.fdac138-2.fna.fbcdn.net/v/t1.6435-9/138612640_231709138478305_4924035284777350209_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=a26aad&_nc_eui2=AeFLHfh40gRArPFydqvijX2ny_hNFPyIJ_PL-E0U_Ign8-h0LE_SKV5JrzVUEil4dz8Jbn0eLVTFo3C6xrHDiIyo&_nc_ohc=1eG2P9mNq8QAX8ZmR6A&_nc_ht=scontent.fdac138-2.fna&oh=00_AfBknZ_HbphREpU8opC9030orvRspJhIMZ0wGsCfX-kxtw&oe=64918864" alt="logo" style="width: 100px;">
+                            <img src="https://scontent.fdac41-1.fna.fbcdn.net/v/t1.6435-9/138612640_231709138478305_4924035284777350209_n.jpg?_nc_cat=101&cb=99be929b-3346023f&ccb=1-7&_nc_sid=a26aad&_nc_eui2=AeFLHfh40gRArPFydqvijX2ny_hNFPyIJ_PL-E0U_Ign8-h0LE_SKV5JrzVUEil4dz8Jbn0eLVTFo3C6xrHDiIyo&_nc_ohc=JPzvbZZidycAX80M5Hb&_nc_ht=scontent.fdac41-1.fna&oh=00_AfDSWeoLKOFtOmrNukGJenPk7aIp7K6hfhVTM6UgYq1Weg&oe=64D7A024" alt="logo" style="width: 100px;">
                         </a>
                     </td>
                     <td style="text-align: right;">
