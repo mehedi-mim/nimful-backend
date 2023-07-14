@@ -62,35 +62,45 @@ class SignupUser(BaseModel):
 
     @validator('username', 'password', 'email', 'mobile', 'first_name', 'last_name')
     def validate_data(cls, value, field):
-        if len(value) > 20:
-            raise HTTPException(detail=f"Max length of any value is 20!", status_code=400)
 
         common_validation = CommonValidation()
         if field.name == 'username':
+            if len(value) > 29:
+                raise HTTPException("Username contains at most 29 characters!")
             value = ' '.join(value.split())
             if len(value) == 0 or value == " ":
                 raise HTTPException(detail=f"Please enter a valid {field.name}", status_code=400)
 
         if field.name == 'email':
+            if len(value) > 99:
+                raise HTTPException("Email contains at most 99 characters!")
             validation = common_validation.validate_email(value)
             if not validation:
                 raise HTTPException(detail=f"Invalid {field.name}: {value}", status_code=400)
 
         if field.name == 'first_name' or field.name == 'last_name':
+            if len(value) > 49:
+                raise HTTPException("Name contains at most 49 characters!")
             value = ' '.join(value.split())
             if len(value) == 0 or value == " ":
                 raise HTTPException(detail=f"Names can't be empty!", status_code=400)
 
         if field.name == 'password':
+            if len(value) > 50:
+                raise HTTPException("Password contains at most 50 characters!")
             validation = common_validation.global_password_check(value)
             if not validation["password_ok"]:
                 raise HTTPException(detail="Password should be at least 8 digits with a special character, "
                                            "a capital letter, and a number!", status_code=400)
 
         if field.name == 'mobile':
-            validation = common_validation.phone_check(value)
-            if not validation:
-                raise HTTPException(detail="Phone number is not valid. Please check with your country code "
+            if len(value) > 19:
+                raise HTTPException("Phone number contains at most 19 characters!")
+            if len(value):
+                value = "+"+value
+                validation = common_validation.phone_check(value)
+                if not validation:
+                    raise HTTPException(detail="Phone number is not valid. Please check with your country code "
                                            "and required length!", status_code=400)
 
         return value
