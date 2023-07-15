@@ -286,7 +286,7 @@ class UserService(UserRepository):
                     email_type=MailSendType.CONTACT_ME.value,
                     send_message_data=send_message_data
                 )
-                return {"message": "We got a message from you,thanks!"}
+                return {"message": "We got a message from you, keep patience while reviewing!"}
             except Exception as e:
                 print(e)
         raise HTTPException(409, detail="Sorry,we are having some problem while receiving your message!")

@@ -128,3 +128,29 @@ class SendMessageData(BaseModel):
     sender_name: str
     subject: str
     message: str
+
+    @validator('sender_name', 'subject', 'message')
+    def validate_data(cls, value, field):
+
+        common_validation = CommonValidation()
+        if field.name == 'sender_name':
+            if len(value) > 49:
+                raise HTTPException(detail="Name contains at most 49 characters!",status_code=409)
+            value = ' '.join(value.split())
+            if len(value) == 0 or value == " ":
+                raise HTTPException(detail=f"Please enter a valid name!", status_code=400)
+
+        if field.name == 'subject':
+            if len(value) > 99:
+                raise HTTPException(detail="Subject contains at most 99 characters!",status_code=409)
+            value = ' '.join(value.split())
+            if len(value) == 0 or value == " ":
+                raise HTTPException(detail=f"Invalid subject", status_code=400)
+
+        if field.name == 'message':
+            if len(value) > 1000:
+                raise HTTPException(detail="Message contains at most 1000 characters!",status_code=409)
+            value = ' '.join(value.split())
+            if len(value) == 0 or value == " ":
+                raise HTTPException(detail=f"Message can't be empty!", status_code=400)
+        return value
