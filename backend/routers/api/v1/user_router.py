@@ -22,11 +22,26 @@ async def self_profile(
         db=Depends(get_db),
         current_user=Depends(LoginService.get_current_user)
 ):
+    if not current_user.seed:
+        user_service = UserService()
+        current_user = await user_service.create_seed_data(db, current_user)
+
     return {
         "full_name": f"{current_user.first_name} {current_user.last_name}",
         "user_name": f"{current_user.username}",
         "seed": f"{current_user.seed}"
     }
+
+
+@r.post("/generate-new-seed")
+async def create_seed(
+        db=Depends(get_db),
+        current_user=Depends(LoginService.get_current_user)
+):
+    user_service = UserService()
+    current_user = await user_service.create_seed_data(db, current_user)
+
+    return {"seed": current_user.seed}
 
 
 @r.post("/create-seed")
