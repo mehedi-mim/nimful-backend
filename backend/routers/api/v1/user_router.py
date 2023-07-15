@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request, BackgroundTasks, Header
 from db import get_db
-from schemas.user_schema import SeedDomain
+from schemas.user_schema import SeedDomain, SendMessageData
 from services.user_service import UserService
 from services.auth_services import LoginService
 
@@ -20,15 +20,27 @@ async def verify_seed(
 @r.post("/create-seed")
 async def create_seed(
         db=Depends(get_db),
-        current_user = Depends(LoginService.get_current_user)
+        current_user=Depends(LoginService.get_current_user)
 ):
     user_service = UserService()
     return await user_service.create_seed(db, current_user)
 
+
 @r.post("/create-domain-visit")
 async def create_domain_visit(
-        seed_with_domain:SeedDomain,
+        seed_with_domain: SeedDomain,
         db=Depends(get_db),
 ):
     user_service = UserService()
-    return await user_service.create_domain_visit(db,seed_with_domain)
+    return await user_service.create_domain_visit(db, seed_with_domain)
+
+
+@r.post("/contact-me")
+async def send_message(
+        background_tasks: BackgroundTasks,
+        send_message_data: SendMessageData,
+        db=Depends(get_db)
+
+):
+    user_service = UserService()
+    return await user_service.send_message(send_message_data, background_tasks)

@@ -97,11 +97,11 @@ class SignupUser(BaseModel):
             if len(value) > 19:
                 raise HTTPException("Phone number contains at most 19 characters!")
             if len(value):
-                value = "+"+value
+                value = "+" + value
                 validation = common_validation.phone_check(value)
                 if not validation:
                     raise HTTPException(detail="Phone number is not valid. Please check with your country code "
-                                           "and required length!", status_code=400)
+                                               "and required length!", status_code=400)
 
         return value
 
@@ -122,3 +122,9 @@ class LoginData(BaseModel):
 class SeedDomain(BaseModel):
     seed: str
     domain: str
+
+
+class SendMessageData(BaseModel):
+    sender_name: str
+    subject: str
+    message: str

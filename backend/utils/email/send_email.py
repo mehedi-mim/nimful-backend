@@ -13,6 +13,11 @@ async def send_email(email, email_type: Any, **kwargs):
         if email_type == email_type_enums.MailSendType.VERIFICATION.value:
             subject = "Confirm your email address"
             body = verification_mail(kwargs, email=email)
+        elif email_type == email_type_enums.MailSendType.CONTACT_ME.value:
+            send_message_data = kwargs.get("send_message_data", None)
+            subject = send_message_data.subject
+            body = f"{send_message_data.sender_name} : {send_message_data.message}"
+
         else:
             return
             # Email Send

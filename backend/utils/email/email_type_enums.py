@@ -16,3 +16,4 @@ class MailSendType(ExtendedEnum):
     VERIFICATION = 1
     PASSWORD_RESET = 2
     INVITATION_USER = 3
+    CONTACT_ME = 4

@@ -13,8 +13,10 @@ class Config(BaseSettings):
     backend_port: int
     is_reload: bool
     paseto_local_key: str
+
     email_user: str
     email_user_password: str
+    contact_me_email:str
 
     login_url: str
     signup_verification_url: str

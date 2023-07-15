@@ -272,3 +272,21 @@ class UserService(UserRepository):
         if db_domain_visit:
             return "Success"
         raise HTTPException(422, "Invalid data!")
+
+    @staticmethod
+    async def send_message(send_message_data, background_tasks):
+        """
+        """
+        if send_message_data and send_message_data.sender_name \
+                and send_message_data.subject and send_message_data.message:
+            try:
+                background_tasks.add_task(
+                    send_email,
+                    email=get_config().contact_me_email,
+                    email_type=MailSendType.CONTACT_ME.value,
+                    send_message_data=send_message_data
+                )
+                return {"message": "We got a message from you,thanks!"}
+            except Exception as e:
+                print(e)
+        raise HTTPException(409, detail="Sorry,we are having some problem while receiving your message!")
