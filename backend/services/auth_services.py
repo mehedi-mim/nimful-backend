@@ -97,7 +97,7 @@ class LoginService(UserRepository):
 
     @staticmethod
     async def get_current_user(request: Request):
-        access_token = request.headers.get("access_token", None)
+        access_token = request.headers.get("authorization", None)
         if not access_token:
             raise HTTPException(401, "Not authenticated.")
         async with get_session() as db:
