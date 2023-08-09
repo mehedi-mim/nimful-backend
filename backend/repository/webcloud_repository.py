@@ -25,6 +25,7 @@ class WebCloudRepository:
         try:
             user_sql = select(models.DomainVisitUser).where(
                 models.DomainVisitUser.user_id == user.id,
+                models.DomainVisitUser.deleted_at == None
             )
             data = (await db.execute(user_sql)).scalars().first()
             return data

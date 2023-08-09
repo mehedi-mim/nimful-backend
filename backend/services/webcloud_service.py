@@ -26,7 +26,7 @@ class WebCloudService(WebCloudRepository):
             return formatted_data
         else:
             return []
-        
+
     async def clear_history(
             self,
             db,
