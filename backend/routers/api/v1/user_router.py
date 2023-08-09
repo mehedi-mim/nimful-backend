@@ -65,9 +65,7 @@ async def create_domain_visit(
 @r.post("/contact-me")
 async def send_message(
         background_tasks: BackgroundTasks,
-        send_message_data: SendMessageData,
-        db=Depends(get_db)
-
+        send_message_data: SendMessageData
 ):
     user_service = UserService()
     return await user_service.send_message(send_message_data, background_tasks)

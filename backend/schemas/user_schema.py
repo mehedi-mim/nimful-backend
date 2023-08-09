@@ -135,10 +135,10 @@ class SendMessageData(BaseModel):
         common_validation = CommonValidation()
         if field.name == 'sender_name':
             if len(value) > 49:
-                raise HTTPException(detail="Name contains at most 49 characters!",status_code=409)
-            value = ' '.join(value.split())
-            if len(value) == 0 or value == " ":
-                raise HTTPException(detail=f"Please enter a valid name!", status_code=400)
+                raise HTTPException(detail="Email contains at most 49 characters!",status_code=409)
+            validation = common_validation.validate_email(value)
+            if not validation:
+                raise HTTPException(detail=f"Invalid {field.name}: {value}", status_code=400)
 
         if field.name == 'subject':
             if len(value) > 99:

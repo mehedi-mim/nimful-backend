@@ -14,3 +14,12 @@ async def get_web_cloud(
 ):
     web_cloud_service = WebCloudService()
     return await web_cloud_service.get_web_cloud(db, current_user)
+
+
+@r.get("/clear_history")
+async def clear_history(
+        db=Depends(get_db),
+        current_user=Depends(LoginService.get_current_user)
+):
+    web_cloud_service = WebCloudService()
+    return await web_cloud_service.clear_history(db, current_user)
