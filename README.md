@@ -69,14 +69,8 @@ The project uses the following technologies:
 - Nginx: Reverse proxy server for handling incoming requests.
 ## Development
 
-To start the development server, run `uvicorn backend.main:app --reload`.
+To start the development server, run `python main.py`.
 This will start the server in debug mode and reload the application whenever changes are made to the code.
-
-To run the tests, run `pytest`.
-This will run all tests in the `tests` directory.
-
-To run the linters, run `flake8` and `black`.
-This will check the code for any linting errors and format the code using Black.
 
 ## Deployment
 
@@ -111,12 +105,3 @@ server {
 ```
 
 Make sure to replace `example.com` with your domain name and adjust any other configurations as necessary.
-## Contributing
-
-Contributions are welcome!
-To contribute, fork the repository and create a pull request with your changes.
-
-Please make sure to follow the following guidelines:
-
-- Make sure to document any new code using FastAPI's built-in documentation features.
-
